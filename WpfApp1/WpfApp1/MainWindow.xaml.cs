@@ -27,8 +27,8 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
+            
 
-            grid2.IsEnabled = false;
 
             using (SqlConnection conn = new SqlConnection(str)) {
 
@@ -39,7 +39,6 @@ namespace WpfApp1
                 da.Fill(ds);
                 DataTable myTable = ds.Tables[0];
                 grid1.ItemsSource = myTable.DefaultView;
-        
 
 
             }
@@ -51,9 +50,9 @@ namespace WpfApp1
         private void grid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-
-
             textbox1.Text = "";
+
+            grid2.IsEnabled = false;
 
             foreach (DataRowView row in grid1.SelectedItems)
             {
@@ -75,24 +74,27 @@ namespace WpfApp1
                 DataTable myTable = ds.Tables[1];
                 grid2.ItemsSource = myTable.DefaultView;
 
-                grid2.Columns[0].IsReadOnly = true;
+               
 
               
             }
 
 
-
+           
 
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
-          
+            grid2.IsEnabled = true;
+            grid2.IsReadOnly = false;
+            grid2.CanUserAddRows = false;
 
             if (btn1.Content as string == "修改")
             {
                
-                grid2.IsEnabled = true; 
+             
+                
                 btn1.Content = "儲存";
 
            
@@ -102,15 +104,11 @@ namespace WpfApp1
             {  
                 using (SqlConnection conn = new SqlConnection(str))
                 {
-                    conn.Open();
-
                     (grid2.Columns[0].GetCellContent(grid2.Items[0]) as TextBlock).IsEnabled = false;
                     (grid2.Columns[0].GetCellContent(grid2.Items[1]) as TextBlock).IsEnabled = false;
                     (grid2.Columns[0].GetCellContent(grid2.Items[2]) as TextBlock).IsEnabled = false;
 
-            
-
-
+                    conn.Open();
                     string 實際尺寸 = (grid2.Columns[1].GetCellContent(grid2.Items[0]) as TextBlock).Text;
                     string 拆料尺寸 = (grid2.Columns[2].GetCellContent(grid2.Items[0]) as TextBlock).Text;
                     SqlCommand cmd = new SqlCommand("update_table1", conn);
@@ -158,6 +156,8 @@ namespace WpfApp1
         private void btn2_Click(object sender, RoutedEventArgs e)
         {
 
+  
+
 
             int s1 = 0;
             int s2 = 0;
@@ -191,5 +191,7 @@ namespace WpfApp1
             // Console.WriteLine(s2 + "\t" + 實際尺寸2 + "\t" + 拆料尺寸2);
             // Console.WriteLine(s3 + "\t" + 實際尺寸3 + "\t" + 拆料尺寸3);
         }
+
+     
     }
 }

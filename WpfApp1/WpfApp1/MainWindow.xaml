@@ -23,11 +23,11 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
-        <DataGrid x:Name="grid2" Grid.Column="1" HeadersVisibility="All" HorizontalAlignment="Left" Height="379" Margin="132,150,0,0" VerticalAlignment="Top" Width="402"  AutoGenerateColumns="False" ItemsSource="{Binding}">
+        <DataGrid x:Name="grid2" Grid.Column="1" HeadersVisibility="None" HorizontalAlignment="Left" Height="379" Margin="132,150,0,0" VerticalAlignment="Top" Width="402"  AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="板厚" Binding="{Binding 板厚}" />
-                <DataGridTextColumn Header="實際尺寸" Binding="{Binding 實際尺寸, Mode=TwoWay}"  />
-                <DataGridTextColumn Header="拆料尺寸" Binding="{Binding 拆料尺寸, Mode=TwoWay}" />
+                <DataGridTextColumn Header="實際尺寸" Binding="{Binding 實際尺寸}"  />
+                <DataGridTextColumn Header="拆料尺寸" Binding="{Binding 拆料尺寸}" />
             </DataGrid.Columns>
         </DataGrid>
 
