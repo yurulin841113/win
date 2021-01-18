@@ -23,11 +23,33 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
-        <DataGrid x:Name="grid2" Grid.Column="1" HeadersVisibility="None" HorizontalAlignment="Left" Height="379" Margin="132,150,0,0" VerticalAlignment="Top" Width="402"  AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid x:Name="grid2" Grid.Column="1" HeadersVisibility="None" HorizontalAlignment="Left" Height="379" Margin="132,150,0,0" VerticalAlignment="Top" Width="402"  AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="板厚" Binding="{Binding 板厚}" />
-                <DataGridTextColumn Header="實際尺寸" Binding="{Binding 實際尺寸}"  />
-                <DataGridTextColumn Header="拆料尺寸" Binding="{Binding 拆料尺寸}" />
+                
+                <DataGridTemplateColumn Header="板厚">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=板厚, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="實際尺寸">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=實際尺寸, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="拆料尺寸">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Path=拆料尺寸, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+               
             </DataGrid.Columns>
         </DataGrid>
 

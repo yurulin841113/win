@@ -24,6 +24,8 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         public static string str = "data source = DESK210105PC\\SQLEXPRESS; initial catalog = student; integrated security = True;";
+        DataSet ds = new DataSet();
+        DataTable myTable = new DataTable();
         public MainWindow()
         {
             InitializeComponent();
@@ -35,9 +37,9 @@ namespace WpfApp1
                 SqlCommand cmd = new SqlCommand("select_table1", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataSet ds = new DataSet();
+                ds = new DataSet();
                 da.Fill(ds);
-                DataTable myTable = ds.Tables[0];
+                myTable = ds.Tables[0];
                 grid1.ItemsSource = myTable.DefaultView;
 
 
@@ -69,9 +71,9 @@ namespace WpfApp1
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@代碼", textbox1.Text);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataSet ds = new DataSet();
+                ds = new DataSet();
                 da.Fill(ds);
-                DataTable myTable = ds.Tables[1];
+                myTable = ds.Tables[1];
                 grid2.ItemsSource = myTable.DefaultView;
 
                
@@ -87,64 +89,44 @@ namespace WpfApp1
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
             grid2.IsEnabled = true;
-            grid2.IsReadOnly = false;
+         
             grid2.CanUserAddRows = false;
 
             if (btn1.Content as string == "修改")
             {
-               
-             
-                
-                btn1.Content = "儲存";
 
-           
+              
+
+                btn1.Content = "儲存";
+                
+
+
+
 
             }
             else
             {  
                 using (SqlConnection conn = new SqlConnection(str))
                 {
-                    (grid2.Columns[0].GetCellContent(grid2.Items[0]) as TextBlock).IsEnabled = false;
-                    (grid2.Columns[0].GetCellContent(grid2.Items[1]) as TextBlock).IsEnabled = false;
-                    (grid2.Columns[0].GetCellContent(grid2.Items[2]) as TextBlock).IsEnabled = false;
-
                     conn.Open();
-                    string 實際尺寸 = (grid2.Columns[1].GetCellContent(grid2.Items[0]) as TextBlock).Text;
-                    string 拆料尺寸 = (grid2.Columns[2].GetCellContent(grid2.Items[0]) as TextBlock).Text;
-                    SqlCommand cmd = new SqlCommand("update_table1", conn);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@代碼", textbox1.Text);
-                    cmd.Parameters.AddWithValue("@板厚", 8);
-                    cmd.Parameters.AddWithValue("@實際尺寸", 實際尺寸);
-                    cmd.Parameters.AddWithValue("@拆料尺寸", 拆料尺寸);
-                    cmd.ExecuteNonQuery();
 
+                    for (int i = 0;i < myTable.Rows.Count;i++)
+                    { 
+                        SqlCommand cmd = new SqlCommand("update_table1", conn);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@代碼", textbox1.Text);
+                        cmd.Parameters.AddWithValue("@板厚", Convert.ToInt32(myTable.Rows[i]["板厚"].ToString()));
+                        cmd.Parameters.AddWithValue("@實際尺寸", Convert.ToDecimal(myTable.Rows[i]["實際尺寸"].ToString()));
+                        cmd.Parameters.AddWithValue("@拆料尺寸", Convert.ToDecimal(myTable.Rows[i]["拆料尺寸"].ToString()));
+                        cmd.ExecuteNonQuery();
+                       
+                    }
 
-
-                  
-                    string 實際尺寸2 = (grid2.Columns[1].GetCellContent(grid2.Items[1]) as TextBlock).Text;
-                    string 拆料尺寸2 = (grid2.Columns[2].GetCellContent(grid2.Items[1]) as TextBlock).Text;
-                    SqlCommand cmd2 = new SqlCommand("update_table1", conn);
-                    cmd2.CommandType = CommandType.StoredProcedure;
-                    cmd2.Parameters.AddWithValue("@代碼", textbox1.Text);
-                    cmd2.Parameters.AddWithValue("@板厚", 18);
-                    cmd2.Parameters.AddWithValue("@實際尺寸", 實際尺寸2);
-                    cmd2.Parameters.AddWithValue("@拆料尺寸", 拆料尺寸2);
-                    cmd2.ExecuteNonQuery();
-
-                    string 實際尺寸3 = (grid2.Columns[1].GetCellContent(grid2.Items[2]) as TextBlock).Text;
-                    string 拆料尺寸3 = (grid2.Columns[2].GetCellContent(grid2.Items[2]) as TextBlock).Text;
-                    SqlCommand cmd3 = new SqlCommand("update_table1", conn);
-                    cmd3.CommandType = CommandType.StoredProcedure;
-                    cmd3.Parameters.AddWithValue("@代碼", textbox1.Text);
-                    cmd3.Parameters.AddWithValue("@板厚", 25);
-                    cmd3.Parameters.AddWithValue("@實際尺寸", 實際尺寸3);
-                    cmd3.Parameters.AddWithValue("@拆料尺寸", 拆料尺寸3);
-                    cmd3.ExecuteNonQuery();
-
-
-
-
+                    
+                    int s1 = Convert.ToInt32(myTable.Rows[0]["板厚"].ToString()); 
+                    int s2 = Convert.ToInt32(myTable.Rows[1]["板厚"].ToString());
+                    int s3 = Convert.ToInt32(myTable.Rows[2]["板厚"].ToString());
+                    Console.WriteLine(s1 + "\t" + s2 + "\t" + s3);
 
 
                 }
@@ -156,22 +138,20 @@ namespace WpfApp1
         private void btn2_Click(object sender, RoutedEventArgs e)
         {
 
-  
-
 
             int s1 = 0;
             int s2 = 0;
             int s3 = 0;
 
-            foreach (DataRowView row in grid2.Items)
+            for (int i = 0; i < myTable.Rows.Count; i++)
             {
-                System.Data.DataRow MyRow = row.Row;
-
-                s1 = Convert.ToInt32(MyRow["板厚"].ToString());
-                s2 = Convert.ToInt32(MyRow["實際尺寸"].ToString());
-                s3 = Convert.ToInt32(MyRow["拆料尺寸"].ToString());
                 
-                Console.WriteLine(s1 +"\t" + s2 );
+
+                s1 = Convert.ToInt32(Convert.ToInt32(myTable.Rows[i]["板厚"].ToString()));
+                s2 = Convert.ToInt32(Convert.ToInt32(myTable.Rows[i]["實際尺寸"].ToString()));
+                s3 = Convert.ToInt32(Convert.ToInt32(myTable.Rows[i]["拆料尺寸"].ToString()));
+                
+                Console.WriteLine(s1 +"\t" + s2 +"\t"+s3);
             }
 
         
@@ -192,6 +172,6 @@ namespace WpfApp1
             // Console.WriteLine(s3 + "\t" + 實際尺寸3 + "\t" + 拆料尺寸3);
         }
 
-     
+      
     }
 }
